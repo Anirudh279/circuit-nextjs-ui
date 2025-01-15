@@ -1,6 +1,6 @@
 'use client';
 
-import { Journey } from '@/types';
+import { Journey } from '@/app/types';
 import {
   Table,
   TableBody,
@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, FileText, Video, Network, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
 interface APIJourney {
@@ -38,7 +38,7 @@ export function JourneyList() {
       setIsLoading(true);
       
       const orgId = localStorage.getItem('org_id') || DEFAULT_ORG_ID;
-      localStorage.setItem('org_id', orgId);
+      localStorage.setItem('org_id', orgId); // Ensure org_id is always set
 
       const response = await fetch('https://circuit-webapp-backend-ggcjf7emdtd2dfdw.northcentralus-01.azurewebsites.net/get-org-journeys', {
         method: 'POST',
@@ -177,17 +177,17 @@ export function JourneyList() {
                   <TableCell>
                     <div className="flex gap-2">
                       <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/journey/${journey.id}/flowchart`}>
+                        <Link href={`/journey/${journey.id}/flowchart`}>
                           <Network className="h-4 w-4" />
                         </Link>
                       </Button>
                       <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/journey/${journey.id}/docs`}>
+                        <Link href={`/journey/${journey.id}/docs`}>
                           <FileText className="h-4 w-4" />
                         </Link>
                       </Button>
                       <Button variant="ghost" size="icon" asChild>
-                        <Link to={`/journey/${journey.id}/replay`}>
+                        <Link href={`/journey/${journey.id}/replay`}>
                           <Video className="h-4 w-4" />
                         </Link>
                       </Button>

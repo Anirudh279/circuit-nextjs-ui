@@ -4,7 +4,6 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AlertCircle, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { JourneyList } from '@/components/journey/journey-list';
 
 interface User {
   id: string;
@@ -28,6 +27,7 @@ export default function Home() {
   useEffect(() => {
     async function initializeApp() {
       if (!auth0Id) {
+        // If no auth0Id, just set the default org_id and return
         localStorage.setItem('org_id', DEFAULT_ORG_ID);
         return;
       }
@@ -58,6 +58,7 @@ export default function Home() {
       } catch (error) {
         console.error('Failed to initialize app:', error);
         setError('Failed to initialize application');
+        // Set default org_id even on error
         localStorage.setItem('org_id', DEFAULT_ORG_ID);
       } finally {
         setIsLoading(false);
@@ -103,7 +104,14 @@ export default function Home() {
         </p>
       </div>
       
-      <JourneyList />
+      <div className="flex items-center justify-center h-[60vh]">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2">Select a Journey</h2>
+          <p className="text-muted-foreground">
+            Choose a journey from the sidebar to view its details
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

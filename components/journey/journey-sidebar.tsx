@@ -1,9 +1,12 @@
+'use client';
+
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Journey } from '@/types';
+import { Journey } from '@/app/types';
 import { ChevronRight, Network, PanelLeftClose, PanelLeft, AlertCircle } from 'lucide-react';
 
 interface APIJourney {
@@ -17,7 +20,7 @@ interface APIJourney {
 const DEFAULT_ORG_ID = 'cd194f08-d52a-4ad2-a97a-0efaaebbb3ed';
 
 export function JourneySidebar() {
-  const location = useLocation();
+  const pathname = usePathname();
   const [journeys, setJourneys] = useState<Journey[]>([]);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +33,7 @@ export function JourneySidebar() {
       try {
         setError(null);
         const orgId = localStorage.getItem('org_id') || DEFAULT_ORG_ID;
-        localStorage.setItem('org_id', orgId);
+        localStorage.setItem('org_id', orgId); // Ensure org_id is always set
 
         const response = await fetch('https://circuit-webapp-backend-ggcjf7emdtd2dfdw.northcentralus-01.azurewebsites.net/get-org-journeys', {
           method: 'POST',
@@ -81,7 +84,7 @@ export function JourneySidebar() {
     };
   }, []);
 
-  const isActive = (id: string) => location.pathname.includes(`/journey/${id}`);
+  const isActive = (id: string) => pathname?.includes(`/journey/${id}`);
 
   if (error) {
     return (
@@ -166,7 +169,7 @@ export function JourneySidebar() {
                 )}
                 asChild
               >
-                <Link to={`/journey/${journey.id}/flowchart`}>
+                <Link href={`/journey/${journey.id}/flowchart`}>
                   <Network className="h-4 w-4 shrink-0" />
                   {!isCollapsed && (
                     <div className="flex flex-col items-start min-w-0">

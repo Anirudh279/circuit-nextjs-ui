@@ -27,6 +27,10 @@ import { Badge } from '@/components/ui/badge';
 import { AnalyticsEvent, JourneyStep } from '@/app/types';
 import Link from 'next/link';
 
+const nodeTypes = {
+  custom: CustomNode,
+};
+
 function CustomNode({ data, isConnectable }: any) {
   const events = data.events || [];
   
@@ -123,10 +127,6 @@ function CustomNode({ data, isConnectable }: any) {
     </>
   );
 }
-
-const nodeTypes = {
-  custom: CustomNode,
-};
 
 export default function FlowchartPage({ params }: { params: { id: string } }) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);

@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { JourneyNav } from '@/components/journey/journey-nav';
+import { JourneyNav } from "@/components/journey/journey-nav";
 
 export default function JourneyLayout({
   children,

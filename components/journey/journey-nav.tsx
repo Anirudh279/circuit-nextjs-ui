@@ -1,4 +1,7 @@
-import { Link, useLocation } from 'react-router-dom';
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Network, FileText, Video, AlertCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -11,7 +14,7 @@ interface Journey {
 const DEFAULT_ORG_ID = 'cd194f08-d52a-4ad2-a97a-0efaaebbb3ed';
 
 export function JourneyNav({ journeyId }: { journeyId: string }) {
-  const location = useLocation();
+  const pathname = usePathname();
   const [currentJourney, setCurrentJourney] = useState<Journey | null>(null);
   const [prevJourney, setPrevJourney] = useState<Journey | null>(null);
   const [nextJourney, setNextJourney] = useState<Journey | null>(null);
@@ -24,7 +27,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
       try {
         setError(null);
         const orgId = localStorage.getItem('org_id') || DEFAULT_ORG_ID;
-        localStorage.setItem('org_id', orgId);
+        localStorage.setItem('org_id', orgId); // Ensure org_id is always set
 
         const response = await fetch('https://circuit-webapp-backend-ggcjf7emdtd2dfdw.northcentralus-01.azurewebsites.net/get-org-journeys', {
           method: 'POST',
@@ -84,7 +87,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
     };
   }, [journeyId]);
 
-  const isActive = (path: string) => location.pathname.includes(path);
+  const isActive = (path: string) => pathname?.includes(path);
 
   if (error) {
     return (
@@ -116,7 +119,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
             asChild
             disabled={!prevJourney}
           >
-            <Link to={prevJourney ? `/journey/${prevJourney.id}/flowchart` : '#'}>
+            <Link href={prevJourney ? `/journey/${prevJourney.id}/flowchart` : '#'}>
               <ChevronLeft className="h-4 w-4" />
             </Link>
           </Button>
@@ -129,7 +132,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
             asChild
             disabled={!nextJourney}
           >
-            <Link to={nextJourney ? `/journey/${nextJourney.id}/flowchart` : '#'}>
+            <Link href={nextJourney ? `/journey/${nextJourney.id}/flowchart` : '#'}>
               <ChevronRight className="h-4 w-4" />
             </Link>
           </Button>
@@ -142,7 +145,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
             className="gap-2"
             asChild
           >
-            <Link to={`/journey/${journeyId}/flowchart`}>
+            <Link href={`/journey/${journeyId}/flowchart`}>
               <Network className="h-4 w-4" />
               Flowchart
             </Link>
@@ -153,7 +156,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
             className="gap-2"
             asChild
           >
-            <Link to={`/journey/${journeyId}/docs`}>
+            <Link href={`/journey/${journeyId}/docs`}>
               <FileText className="h-4 w-4" />
               Documentation
             </Link>
@@ -164,7 +167,7 @@ export function JourneyNav({ journeyId }: { journeyId: string }) {
             className="gap-2"
             asChild
           >
-            <Link to={`/journey/${journeyId}/replay`}>
+            <Link href={`/journey/${journeyId}/replay`}>
               <Video className="h-4 w-4" />
               Replay
             </Link>
